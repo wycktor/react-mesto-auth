@@ -63,8 +63,8 @@ class Api {
   }
 
   // Переключение лайка карточки
-  changeLikeCardStatus(_id, isLiked) {
-    return isLiked ? this.deleteLike(_id) : this.setLike(_id);
+  changeLikeCardStatus(id, isLiked) {
+    return isLiked ? this.deleteLike(id) : this.setLike(id);
   }
 
   // Установка лайка карточки
