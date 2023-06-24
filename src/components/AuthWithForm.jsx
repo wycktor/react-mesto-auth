@@ -1,23 +1,14 @@
-import { useState } from 'react';
+import useFormAndValidation from '../hooks/useFormAndValidation';
 
 function AuthWithForm(props) {
-  const [formValue, setFormValue] = useState({
+  const { values, handleChange, errors, isValid } = useFormAndValidation({
     email: '',
     password: ''
   });
 
-  const handleChange = evt => {
-    const { name, value } = evt.target;
-
-    setFormValue({
-      ...formValue,
-      [name]: value
-    });
-  };
-
   const handleSubmit = evt => {
     evt.preventDefault();
-    props.onSubmit(formValue.email, formValue.password);
+    props.onSubmit(values.email, values.password);
   };
 
   return (
@@ -25,22 +16,30 @@ function AuthWithForm(props) {
       <h2 className="login__title">{props.title}</h2>
       <form className="login__form" name={props.name} onSubmit={handleSubmit}>
         <input
-          className="login__input"
+          className={`login__input ${errors.email && 'login__input-error'}`}
           type="email"
           name="email"
           placeholder="Email"
           onChange={handleChange}
-          value={formValue.email}
+          value={values.email || ''}
+          required
         />
+        <span className={`${errors.email && 'login__error_visible'}`}>{errors.email}</span>
         <input
-          className="login__input"
+          className={`login__input ${errors.password && 'login__input-error'}`}
           type="password"
           name="password"
           placeholder="Пароль"
+          minLength="4"
           onChange={handleChange}
-          value={formValue.password}
+          value={values.password || ''}
+          required
         />
-        <button className="login__button" type="submit">
+        <span className={`${errors.password && 'login__error_visible'}`}>{errors.password}</span>
+        <button
+          className={`login__submit hover-link ${!isValid && 'login__submit_disabled'}`}
+          type="submit"
+        >
           {props.textButton}
         </button>
         {props.children}
